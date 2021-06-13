@@ -5,9 +5,9 @@ import { filter } from "rxjs/operators";
 const client = connect("mqtt://broker.hivemq.com");
 const board = new five.Board();
 
-const motorLeds = new five.Leds(["2"]);
-const heaterLeds = new five.Leds(["0", "1"]);
-const coolerLeds = new five.Leds(["3"]);
+let motorLeds: any;
+let heaterLeds: any;
+let coolerLeds: any;
 
 let maxTemp: number = 50;
 let minTemp: number = 20;
@@ -63,6 +63,10 @@ client.on("message", (topic, message) => {
   let parsedMessage = Buffer.from(message).toString();
 
   board.on("ready", function () {
+    motorLeds = new five.Leds(["2"]);
+    heaterLeds = new five.Leds(["0", "1"]);
+    coolerLeds = new five.Leds(["3"]);
+
     switch (topic) {
       case "tempApp/connected":
         return handleConnected(parsedMessage);
@@ -84,7 +88,7 @@ function handleConnected(message: string): void {
   currentTemp$.next(null);
   let thermometer = new five.Thermometer({
     controller: "LM35",
-    pin: "A5",
+    pin: "5",
   });
   thermometer.on("change", function () {
     console.log("Current temp in C", this.C);
