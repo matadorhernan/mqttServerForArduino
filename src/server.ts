@@ -9,8 +9,8 @@ let motorLeds: any;
 let heaterLeds: any;
 let coolerLeds: any;
 
-let maxTemp: number = 50;
-let minTemp: number = 20;
+let maxTemp: number = 15;
+let minTemp: number = 8;
 let maxTemp$: BehaviorSubject<number> = new BehaviorSubject(50);
 let minTemp$: BehaviorSubject<number> = new BehaviorSubject(20);
 let currentTemp$: BehaviorSubject<number> = new BehaviorSubject(null);
