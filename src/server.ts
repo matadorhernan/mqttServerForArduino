@@ -87,6 +87,7 @@ function handleConnected(message: string): void {
     pin: "A5",
   });
   thermometer.on("change", function () {
+    console.log("Current temp in C", this.C);
     currentTemp$.next(this.C);
   });
 }
