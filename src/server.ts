@@ -7,7 +7,7 @@ const board = new five.Board();
 
 const motorLeds = new five.Leds(["2"]);
 const heaterLeds = new five.Leds(["0", "1"]);
-const coolerLeds = new five.Leds(["3", "4"]);
+const coolerLeds = new five.Leds(["3"]);
 
 let maxTemp: number = 50;
 let minTemp: number = 20;
@@ -62,29 +62,29 @@ client.on("message", (topic, message) => {
   //message is a buffer we convert to string, topic is already an string
   let parsedMessage = Buffer.from(message).toString();
 
-  // board.on("ready", function () {
-  switch (topic) {
-    case "tempApp/connected":
-      return handleConnected(parsedMessage);
-    case "tempApp/motorState":
-      return handleMotorState(parsedMessage);
-    case "tempApp/coolerState":
-      return handleCoolerState(parsedMessage);
-    case "tempApp/heaterState":
-      return handleHeaterState(parsedMessage);
-    case "tempApp/heaterState":
-      return handleMaxTempState(parsedMessage);
-    case "tempApp/heaterState":
-      return handleMinTempState(parsedMessage);
-  }
-  // });
+  board.on("ready", function () {
+    switch (topic) {
+      case "tempApp/connected":
+        return handleConnected(parsedMessage);
+      case "tempApp/motorState":
+        return handleMotorState(parsedMessage);
+      case "tempApp/coolerState":
+        return handleCoolerState(parsedMessage);
+      case "tempApp/heaterState":
+        return handleHeaterState(parsedMessage);
+      case "tempApp/heaterState":
+        return handleMaxTempState(parsedMessage);
+      case "tempApp/heaterState":
+        return handleMinTempState(parsedMessage);
+    }
+  });
 });
 
 function handleConnected(message: string): void {
   currentTemp$.next(null);
   let thermometer = new five.Thermometer({
     controller: "LM35",
-    pin: "A0",
+    pin: "A5",
   });
   thermometer.on("change", function () {
     currentTemp$.next(this.C);
