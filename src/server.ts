@@ -7,7 +7,7 @@ import { EventEmitter } from "events";
 
 EventEmitter.defaultMaxListeners = 30;
 
-const client = connect("mqtt://broker.hivemq.com");
+const client = connect("tcp://broker.hivemq.com");
 const board = new five.Board();
 
 let motorLeds: any;
