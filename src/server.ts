@@ -151,6 +151,8 @@ function handleMotorState(message: string): void {
 }
 
 function handleCoolerState(message: string): void {
+  console.log("cooler leds: ", message);
+
   switch (message) {
     case "on": {
       coolerLeds.on();
