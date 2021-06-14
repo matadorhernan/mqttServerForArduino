@@ -22,12 +22,6 @@ let minTemp$: BehaviorSubject<number> = new BehaviorSubject(8);
 let currentTemp$: BehaviorSubject<number> = new BehaviorSubject(null);
 
 client.on("connect", () => {
-  client.subscribe("tempApp/#");
-
-  //publish we are connected to the broker and start motor
-  client.publish("tempApp/connected", "true");
-  client.publish("tempApp/motorState", "on");
-
   board.on("ready", function () {
     motorLeds = new five.Led({
       pin: 13,
@@ -43,6 +37,12 @@ client.on("connect", () => {
       controller: "DHT11_I2C_NANO_BACKPACK",
       freq: 1000,
     });
+
+    client.subscribe("tempApp/#");
+
+    //publish we are connected to the broker and start motor
+    client.publish("tempApp/connected", "true");
+    client.publish("tempApp/motorState", "on");
   });
 });
 
