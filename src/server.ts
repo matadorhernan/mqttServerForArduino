@@ -3,7 +3,7 @@ import * as five from "johnny-five";
 import { BehaviorSubject } from "rxjs";
 import { filter } from "rxjs/operators";
 
-const client = connect("tcp://broker.hivemq.com");
+const client = connect("mqtt://broker.hivemq.com");
 const board = new five.Board();
 
 let motorLeds: any;
