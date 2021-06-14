@@ -21,28 +21,28 @@ let maxTemp$: BehaviorSubject<number> = new BehaviorSubject(15);
 let minTemp$: BehaviorSubject<number> = new BehaviorSubject(8);
 let currentTemp$: BehaviorSubject<number> = new BehaviorSubject(null);
 
-board.on("ready", function () {
-  motorLeds = new five.Led({
-    pin: 13,
-  });
-  heaterLeds = new five.Led({
-    pin: 12,
-  });
-  coolerLeds = new five.Led({
-    pin: 8,
-  });
+client.on("connect", () => {
+  client.subscribe("tempApp/#");
 
-  thermometer = new five.Thermometer({
-    controller: "DHT11_I2C_NANO_BACKPACK",
-    freq: 1000,
-  });
+  //publish we are connected to the broker and start motor
+  client.publish("tempApp/connected", "true");
+  client.publish("tempApp/motorState", "on");
 
-  client.on("connect", () => {
-    client.subscribe("tempApp/#");
+  board.on("ready", function () {
+    motorLeds = new five.Led({
+      pin: 13,
+    });
+    heaterLeds = new five.Led({
+      pin: 12,
+    });
+    coolerLeds = new five.Led({
+      pin: 8,
+    });
 
-    //publish we are connected to the broker and start motor
-    client.publish("tempApp/connected", "true");
-    client.publish("tempApp/motorState", "on");
+    thermometer = new five.Thermometer({
+      controller: "DHT11_I2C_NANO_BACKPACK",
+      freq: 1000,
+    });
   });
 });
 
