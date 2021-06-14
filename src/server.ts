@@ -21,43 +21,40 @@ let maxTemp$: BehaviorSubject<number> = new BehaviorSubject(15);
 let minTemp$: BehaviorSubject<number> = new BehaviorSubject(8);
 let currentTemp$: BehaviorSubject<number> = new BehaviorSubject(null);
 
-await new Promise<void>((resolve, reject) => {
-  board.on("ready", function () {
-    motorLeds = new five.Led({
-      pin: 13,
-    });
-    heaterLeds = new five.Led({
-      pin: 12,
-    });
-    coolerLeds = new five.Led({
-      pin: 8,
-    });
-
-    thermometer = new five.Thermometer({
-      controller: "DHT11_I2C_NANO_BACKPACK",
-      freq: 1000,
-    });
-    resolve();
+board.on("ready", function () {
+  motorLeds = new five.Led({
+    pin: 13,
   });
-});
+  heaterLeds = new five.Led({
+    pin: 12,
+  });
+  coolerLeds = new five.Led({
+    pin: 8,
+  });
 
-client.on("connect", () => {
-  //string true false
-  client.subscribe("tempApp/connected");
+  thermometer = new five.Thermometer({
+    controller: "DHT11_I2C_NANO_BACKPACK",
+    freq: 1000,
+  });
 
-  //string on off
-  client.subscribe("tempApp/motorState");
-  client.subscribe("tempApp/coolerState");
-  client.subscribe("tempApp/heaterState");
+  client.on("connect", () => {
+    //string true false
+    client.subscribe("tempApp/connected");
 
-  //string only numeric chars
-  client.subscribe("tempApp/maxTemp");
-  client.subscribe("tempApp/minTemp");
-  client.subscribe("tempApp/currentReading");
+    //string on off
+    client.subscribe("tempApp/motorState");
+    client.subscribe("tempApp/coolerState");
+    client.subscribe("tempApp/heaterState");
 
-  //publish we are connected to the broker and start motor
-  client.publish("tempApp/connected", "true");
-  client.publish("tempApp/motorState", "on");
+    //string only numeric chars
+    client.subscribe("tempApp/maxTemp");
+    client.subscribe("tempApp/minTemp");
+    client.subscribe("tempApp/currentReading");
+
+    //publish we are connected to the broker and start motor
+    client.publish("tempApp/connected", "true");
+    client.publish("tempApp/motorState", "on");
+  });
 });
 
 //handle temperature change
