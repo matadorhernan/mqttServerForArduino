@@ -129,10 +129,12 @@ function handleMotorState(message: string): void {
     case "on": {
       console.log("Motor encendido");
       motorLeds.on();
+      break;
     }
     case "off": {
       console.log("Motor apagado");
       motorLeds.off();
+      break;
     }
   }
 }
@@ -141,9 +143,11 @@ function handleCoolerState(message: string): void {
   switch (message) {
     case "on": {
       coolerLeds.on();
+      break;
     }
     case "off": {
       coolerLeds.off();
+      break;
     }
   }
 }
@@ -151,9 +155,11 @@ function handleHeaterState(message: string): void {
   switch (message) {
     case "on": {
       heaterLeds.on();
+      break;
     }
     case "off": {
       heaterLeds.off();
+      break;
     }
   }
 }
