@@ -84,9 +84,15 @@ client.on("message", (topic, message) => {
   let parsedMessage = Buffer.from(message).toString();
 
   board.on("ready", function () {
-    motorLeds = new five.Led(board, 0);
-    heaterLeds = new five.Led(board, 1);
-    coolerLeds = new five.Led(board, 2);
+    motorLeds = new five.Led({
+      pin: 0,
+    });
+    heaterLeds = new five.Led({
+      pin: 1,
+    });
+    coolerLeds = new five.Led({
+      pin: 2,
+    });
 
     switch (topic) {
       case "tempApp/connected":
