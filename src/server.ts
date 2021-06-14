@@ -119,11 +119,11 @@ client.on("message", (topic, message) => {
 
 function handleConnected(message: string): void {
   currentTemp$.next(null);
-  let thermometer = new five.Thermometer({
-    controller: "LM35",
-    pin: "5",
-    freq: 1000,
+
+  let thermometer = five.Thermometer({
+    controller: "DHT11_I2C_NANO_BACKPACK",
   });
+
   thermometer.on("data", function () {
     console.log("Current temp in C", this.C);
     currentTemp$.next(this.C);
