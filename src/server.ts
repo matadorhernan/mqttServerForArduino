@@ -122,6 +122,7 @@ function handleConnected(message: string): void {
 
   let thermometer = new five.Thermometer({
     controller: "DHT11_I2C_NANO_BACKPACK",
+    freq: 1000,
   });
 
   thermometer.on("data", function () {
