@@ -38,18 +38,7 @@ board.on("ready", function () {
   });
 
   client.on("connect", () => {
-    //string true false
-    client.subscribe("tempApp/connected");
-
-    //string on off
-    client.subscribe("tempApp/motorState");
-    client.subscribe("tempApp/coolerState");
-    client.subscribe("tempApp/heaterState");
-
-    //string only numeric chars
-    client.subscribe("tempApp/maxTemp");
-    client.subscribe("tempApp/minTemp");
-    client.subscribe("tempApp/currentReading");
+    client.subscribe("tempApp/#");
 
     //publish we are connected to the broker and start motor
     client.publish("tempApp/connected", "true");
