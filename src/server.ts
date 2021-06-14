@@ -3,7 +3,7 @@ import * as five from "johnny-five";
 import { BehaviorSubject } from "rxjs";
 import { filter } from "rxjs/operators";
 
-const client = connect("mqtt://broker.hivemq.com");
+const client = connect("tcp://broker.hivemq.com");
 const board = new five.Board();
 
 let motorLeds: any;
@@ -90,17 +90,23 @@ client.on("message", (topic, message) => {
 
     switch (topic) {
       case "tempApp/connected":
-        return handleConnected(parsedMessage);
+        handleConnected(parsedMessage);
+        break;
       case "tempApp/motorState":
-        return handleMotorState(parsedMessage);
+        handleMotorState(parsedMessage);
+        break;
       case "tempApp/coolerState":
-        return handleCoolerState(parsedMessage);
+        handleCoolerState(parsedMessage);
+        break;
       case "tempApp/heaterState":
-        return handleHeaterState(parsedMessage);
+        handleHeaterState(parsedMessage);
+        break;
       case "tempApp/maxTemp":
-        return handleMaxTempState(parsedMessage);
+        handleMaxTempState(parsedMessage);
+        break;
       case "tempApp/minTemp":
-        return handleMinTempState(parsedMessage);
+        handleMinTempState(parsedMessage);
+        break;
     }
   });
 });
@@ -121,9 +127,11 @@ function handleConnected(message: string): void {
 function handleMotorState(message: string): void {
   switch (message) {
     case "on": {
+      console.log("Motor encendido");
       motorLeds.on();
     }
     case "off": {
+      console.log("Motor apagado");
       motorLeds.off();
     }
   }
