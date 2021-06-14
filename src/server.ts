@@ -98,6 +98,8 @@ client.on("message", (topic, message) => {
       pin: 8,
     });
 
+    console.log("topic: ", topic);
+
     switch (topic) {
       case "tempApp/connected":
         handleConnected(parsedMessage);
