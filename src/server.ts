@@ -43,17 +43,18 @@ currentTemp$
     })
   )
   .subscribe((filteredValue) => {
-    //if we need to cool and report
-    client.publish(
-      "tempApp/coolerState",
-      filteredValue >= maxTemp ? "on" : "off"
-    );
+    //if we need to heat or cool
 
-    //if we need to heat and report
-    client.publish(
-      "tempApp/heaterState",
-      filteredValue <= minTemp ? "on" : "off"
-    );
+    if (filteredValue < minTemp) {
+      client.publish("tempApp/coolerState", "off");
+      client.publish("tempApp/heaterState", "on");
+    } else if (filteredValue > minTemp && filteredValue <= maxTemp) {
+      client.publish("tempApp/coolerState", "off");
+      client.publish("tempApp/heaterState", "off");
+    } else {
+      client.publish("tempApp/coolerState", "on");
+      client.publish("tempApp/heaterState", "off");
+    }
 
     //report reading
     client.publish("tempApp/currentReading", filteredValue.toString());
