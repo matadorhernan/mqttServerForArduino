@@ -3,6 +3,10 @@ import * as five from "johnny-five";
 import { BehaviorSubject } from "rxjs";
 import { filter } from "rxjs/operators";
 
+import { EventEmitter } from "events";
+
+EventEmitter.defaultMaxListeners = 30;
+
 const client = connect("mqtt://broker.hivemq.com");
 const board = new five.Board();
 
