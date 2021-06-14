@@ -85,13 +85,13 @@ client.on("message", (topic, message) => {
 
   board.on("ready", function () {
     motorLeds = new five.Led({
-      pin: 0,
+      pin: 13,
     });
     heaterLeds = new five.Led({
-      pin: 1,
+      pin: 12,
     });
     coolerLeds = new five.Led({
-      pin: 2,
+      pin: 8,
     });
 
     switch (topic) {
