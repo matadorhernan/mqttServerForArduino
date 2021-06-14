@@ -13,12 +13,33 @@ const board = new five.Board();
 let motorLeds: any;
 let heaterLeds: any;
 let coolerLeds: any;
+let thermometer: any;
 
 let maxTemp: number = 15;
 let minTemp: number = 8;
 let maxTemp$: BehaviorSubject<number> = new BehaviorSubject(15);
 let minTemp$: BehaviorSubject<number> = new BehaviorSubject(8);
 let currentTemp$: BehaviorSubject<number> = new BehaviorSubject(null);
+
+await new Promise<void>((resolve, reject) => {
+  board.on("ready", function () {
+    motorLeds = new five.Led({
+      pin: 13,
+    });
+    heaterLeds = new five.Led({
+      pin: 12,
+    });
+    coolerLeds = new five.Led({
+      pin: 8,
+    });
+
+    thermometer = new five.Thermometer({
+      controller: "DHT11_I2C_NANO_BACKPACK",
+      freq: 1000,
+    });
+    resolve();
+  });
+});
 
 client.on("connect", () => {
   //string true false
@@ -91,50 +112,32 @@ client.on("message", (topic, message) => {
   //message is a buffer we convert to string, topic is already an string
   let parsedMessage = Buffer.from(message).toString();
 
-  board.on("ready", function () {
-    motorLeds = new five.Led({
-      pin: 13,
-    });
-    heaterLeds = new five.Led({
-      pin: 12,
-    });
-    coolerLeds = new five.Led({
-      pin: 8,
-    });
+  console.log("topic: ", topic);
 
-    console.log("topic: ", topic);
-
-    switch (topic) {
-      case "tempApp/connected":
-        handleConnected(parsedMessage);
-        break;
-      case "tempApp/motorState":
-        handleMotorState(parsedMessage);
-        break;
-      case "tempApp/coolerState":
-        handleCoolerState(parsedMessage);
-        break;
-      case "tempApp/heaterState":
-        handleHeaterState(parsedMessage);
-        break;
-      case "tempApp/maxTemp":
-        handleMaxTempState(parsedMessage);
-        break;
-      case "tempApp/minTemp":
-        handleMinTempState(parsedMessage);
-        break;
-    }
-  });
+  switch (topic) {
+    case "tempApp/connected":
+      handleConnected(parsedMessage);
+      break;
+    case "tempApp/motorState":
+      handleMotorState(parsedMessage);
+      break;
+    case "tempApp/coolerState":
+      handleCoolerState(parsedMessage);
+      break;
+    case "tempApp/heaterState":
+      handleHeaterState(parsedMessage);
+      break;
+    case "tempApp/maxTemp":
+      handleMaxTempState(parsedMessage);
+      break;
+    case "tempApp/minTemp":
+      handleMinTempState(parsedMessage);
+      break;
+  }
 });
 
 function handleConnected(message: string): void {
   currentTemp$.next(null);
-
-  let thermometer = new five.Thermometer({
-    controller: "DHT11_I2C_NANO_BACKPACK",
-    freq: 1000,
-  });
-
   thermometer.on("data", function () {
     console.log("Current temp in C", this.C);
     currentTemp$.next(this.C);
