@@ -120,7 +120,7 @@ client.on("message", (topic, message) => {
 function handleConnected(message: string): void {
   currentTemp$.next(null);
 
-  let thermometer = five.Thermometer({
+  let thermometer = new five.Thermometer({
     controller: "DHT11_I2C_NANO_BACKPACK",
   });
 
