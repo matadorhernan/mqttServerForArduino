@@ -48,12 +48,15 @@ currentTemp$
     if (filteredValue < minTemp) {
       client.publish("tempApp/coolerState", "off");
       client.publish("tempApp/heaterState", "on");
+      console.log("Muy frio");
     } else if (filteredValue > minTemp && filteredValue <= maxTemp) {
       client.publish("tempApp/coolerState", "off");
       client.publish("tempApp/heaterState", "off");
+      console.log("Normal");
     } else {
       client.publish("tempApp/coolerState", "on");
       client.publish("tempApp/heaterState", "off");
+      console.log("Muy Caliente");
     }
 
     //report reading
