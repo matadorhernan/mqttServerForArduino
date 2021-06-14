@@ -3,7 +3,8 @@
     "target": "es2017",
     "module": "esnext",
     "outDir": "dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "moduleResolution": "node"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", ".vscode"]
