@@ -2,6 +2,7 @@ import { connect } from "mqtt";
 import * as five from "johnny-five";
 import { BehaviorSubject } from "rxjs";
 import { filter } from "rxjs/operators";
+
 const client = connect("mqtt://broker.hivemq.com");
 const board = new five.Board();
 
@@ -11,8 +12,8 @@ let coolerLeds: any;
 
 let maxTemp: number = 15;
 let minTemp: number = 8;
-let maxTemp$: BehaviorSubject<number> = new BehaviorSubject(50);
-let minTemp$: BehaviorSubject<number> = new BehaviorSubject(20);
+let maxTemp$: BehaviorSubject<number> = new BehaviorSubject(15);
+let minTemp$: BehaviorSubject<number> = new BehaviorSubject(8);
 let currentTemp$: BehaviorSubject<number> = new BehaviorSubject(null);
 
 client.on("connect", () => {
@@ -51,7 +52,7 @@ currentTemp$
     //if we need to heat and report
     client.publish(
       "tempApp/heaterState",
-      filteredValue <= maxTemp ? "on" : "off"
+      filteredValue <= minTemp ? "on" : "off"
     );
 
     //report reading
@@ -89,8 +90,9 @@ function handleConnected(message: string): void {
   let thermometer = new five.Thermometer({
     controller: "LM35",
     pin: "5",
+    freq: 1000,
   });
-  thermometer.on("change", function () {
+  thermometer.on("data", function () {
     console.log("Current temp in C", this.C);
     currentTemp$.next(this.C);
   });
@@ -132,6 +134,7 @@ function handleMaxTempState(message: string): void {
   const parsedTemp = Number(message);
   maxTemp$.next(isNaN(parsedTemp) ? maxTemp : parsedTemp);
 }
+
 function handleMinTempState(message: string): void {
   const parsedTemp = Number(message);
   minTemp$.next(isNaN(parsedTemp) ? minTemp : parsedTemp);
