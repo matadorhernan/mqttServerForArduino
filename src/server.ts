@@ -59,6 +59,26 @@ currentTemp$
     client.publish("tempApp/currentReading", filteredValue.toString());
   });
 
+maxTemp$
+  .pipe(
+    filter((value) => {
+      return value != null;
+    })
+  )
+  .subscribe((filteredValue) => {
+    maxTemp = filteredValue;
+  });
+
+minTemp$
+  .pipe(
+    filter((value) => {
+      return value != null;
+    })
+  )
+  .subscribe((filteredValue) => {
+    minTemp = filteredValue;
+  });
+
 client.on("message", (topic, message) => {
   //message is a buffer we convert to string, topic is already an string
   let parsedMessage = Buffer.from(message).toString();
@@ -77,9 +97,9 @@ client.on("message", (topic, message) => {
         return handleCoolerState(parsedMessage);
       case "tempApp/heaterState":
         return handleHeaterState(parsedMessage);
-      case "tempApp/heaterState":
+      case "tempApp/maxTemp":
         return handleMaxTempState(parsedMessage);
-      case "tempApp/heaterState":
+      case "tempApp/minTemp":
         return handleMinTempState(parsedMessage);
     }
   });
